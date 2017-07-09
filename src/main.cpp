@@ -16,7 +16,7 @@
 // Define the array of leds
 CRGB leds[NUM_LEDS];
 String incomingString = String("");   // for incoming serial data
-String MODE = String("");
+String MODE = String("solid");
 int COLOR[] = {10, 100, 255};
 // Do some setup.
 void setup() {
@@ -52,17 +52,57 @@ void solidColor() {
   FastLED.show();
   delay(200);
 }
-void loop() {
-  if (MODE.equals("test")) {
-    Serial.println("test worked");
+
+void fadeall() { // Fades LED's over time.
+  for(int i = 0; i < NUM_LEDS; i++) {
+    leds[i].nscale8(250);
   }
-  if (MODE != "test") {
-    Serial.println("WTF");
+}
+
+void circleColor() {
+  for(int i = 0; i < NUM_LEDS; i++) {
+		// Set the i'th led to red
+		leds[i] = CRGB(COLOR[0], COLOR[1], COLOR[2]);
+		// Show the leds
+		FastLED.show();
+		// now that we've shown the leds, reset the i'th led to black
+		// leds[i] = CRGB::Black;
+		fadeall();
+		// Wait a little bit before we loop around and do it again
+		delay(10);
+	}
+}
+
+void circleRainbow() {
+  static uint8_t hue = 0;
+	// First slide the led in one direction
+	for(int i = 0; i < NUM_LEDS; i++) {
+		// Set the i'th led to red
+		leds[i] = CHSV(hue++, 255, 255);
+		// Show the leds
+		FastLED.show();
+		// now that we've shown the leds, reset the i'th led to black
+		// leds[i] = CRGB::Black;
+		fadeall();
+		// Wait a little bit before we loop around and do it again
+		delay(10);
+	}
+}
+
+void loop() {
+  readSerial();
+  if (MODE.equals("solid")) {
+    solidColor();
+  }
+  if (MODE.equals("circle")) {
+    circleColor();
+  }
+  if(MODE.equals("rainbow")) {
+    circleRainbow();
   }
 
   Serial.print("current mode is: ");
   Serial.println(MODE);
-  readSerial();
-  solidColor();
+
   // Serial.print("x");
 }
