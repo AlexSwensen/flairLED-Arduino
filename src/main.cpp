@@ -18,19 +18,36 @@ CRGB leds[NUM_LEDS];
 
 // Setup some settings we will use elsewhere
 String incomingString = String("");   // for incoming serial data
-String MODE = String("solidrainbow");
-int COLOR[] = {10, 100, 255};
+
+// setup data type for color
+struct color_t {
+  int red;
+  int green;
+  int blue;
+};
+
+// setup settings structure
+struct setting_t {
+  color_t color;
+  String mode;
+} settings;
 
 // Do some setup.
 void setup() {
   Serial.begin(57600); // reduce for slower arduinos.
+
+  // setup defaults for settings.
+  settings.color = {10, 100, 255};
+  settings.mode = "solidrainbow";
+  
+
   LEDS.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   LEDS.setBrightness(50);
   Serial.println("Ready");
 }
 
 void setSetting(String input) {
-  MODE = input;
+  settings.mode = input;
 }
 
 void readSerial() {
@@ -49,7 +66,7 @@ void readSerial() {
 void solidColor() {
   // Set all LED's the same color.
   for (int i = 0; i < NUM_LEDS; i++) {
-          leds[i] = CRGB(COLOR[0], COLOR[1], COLOR[2]);
+          leds[i] = CRGB(settings.color.red, settings.color.blue, settings.color.green);
   }
 
   FastLED.show();
@@ -80,7 +97,7 @@ void fadeall() { // Fades LED's over time.
 void circleColor() {
   for(int i = 0; i < NUM_LEDS; i++) {
 		// Set the i'th led to COLOR
-		leds[i] = CRGB(COLOR[0], COLOR[1], COLOR[2]);
+		leds[i] = CRGB(settings.color.red, settings.color.blue, settings.color.green);
 		// Show the leds
 		FastLED.show();
 		// now that we've shown the leds, reset the i'th led to black
@@ -110,24 +127,24 @@ void circleRainbow() {
 void loop() {
   readSerial();
 
-  if (MODE.equals("solid")) {
+  if (settings.mode.equals("solid")) {
     solidColor();
   }
 
-  if (MODE.equals("solidrainbow")) {
+  if (settings.mode.equals("solidrainbow")) {
     solidRainbow();
   }
 
-  if (MODE.equals("circle")) {
+  if (settings.mode.equals("circle")) {
     circleColor();
   }
 
-  if(MODE.equals("rainbow")) {
+  if(settings.mode.equals("rainbow")) {
     circleRainbow();
   }
 
   Serial.print("current mode is: ");
-  Serial.println(MODE);
+  Serial.println(settings.mode);
 
   // Serial.print("x");
 }
