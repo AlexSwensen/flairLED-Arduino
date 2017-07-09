@@ -15,9 +15,12 @@
 
 // Define the array of leds
 CRGB leds[NUM_LEDS];
+
+// Setup some settings we will use elsewhere
 String incomingString = String("");   // for incoming serial data
 String MODE = String("solidrainbow");
 int COLOR[] = {10, 100, 255};
+
 // Do some setup.
 void setup() {
   Serial.begin(57600); // reduce for slower arduinos.
