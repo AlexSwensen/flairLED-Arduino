@@ -34,32 +34,43 @@ struct setting_t {
 
 // Do some setup.
 void setup() {
-  Serial.begin(57600); // reduce for slower arduinos.
+  Serial.setTimeout(250); // Set Serial timeout (increase for slower Arduino's)
+  Serial.begin(19200); // Set Baud Rate (reduce for slower Arduino's.)
 
   // setup defaults for settings.
   settings.color = {10, 100, 255};
   settings.mode = "solidrainbow";
-  
 
   LEDS.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   LEDS.setBrightness(50);
   Serial.println("Ready");
 }
 
-void setSetting(String input) {
-  settings.mode = input;
+/**
+* Parses serial input and sets modes to appropriate things.
+*/
+void parseSerial(String input) {
+
+  if (input.indexOf('mode')) {
+    input.trim(); // removes whitespace
+    input.remove(0, 5); // removes 'mode'
+    settings.mode = input;
+  }
+
+  if (input.indexOf('color')) {
+    input.trim(); //removes whitespace
+    input.remove(0, 6);
+  }
 }
 
 void readSerial() {
-
   if (Serial.available() > 0) {
     // read the incoming byte:
     incomingString = Serial.readString();
-
     // say what you got:
     Serial.print("I received: ");
     Serial.println(incomingString);
-    setSetting(incomingString);
+    parseSerial(incomingString);
   }
 }
 
