@@ -17,6 +17,7 @@
 CRGB leds[NUM_LEDS];
 String incomingString = String("");   // for incoming serial data
 String MODE = String("");
+int COLOR[] = {10, 100, 255};
 // Do some setup.
 void setup() {
   Serial.begin(57600);
@@ -43,14 +44,12 @@ void readSerial() {
 }
 
 void solidColor() {
-  // First slide the led in one direction
+  // Set all LED's the same color.
   for (int i = 0; i < NUM_LEDS; i++) {
-          leds[i] = CRGB(10, 100, 255);
+          leds[i] = CRGB(COLOR[0], COLOR[1], COLOR[2]);
   }
 
   FastLED.show();
-  // Serial.print(COLORS[x]);
-  // Serial.print('\n');
   delay(200);
 }
 void loop() {
