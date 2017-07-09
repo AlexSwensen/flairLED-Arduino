@@ -20,7 +20,7 @@ String MODE = String("solidrainbow");
 int COLOR[] = {10, 100, 255};
 // Do some setup.
 void setup() {
-  Serial.begin(57600);
+  Serial.begin(57600); // reduce for slower arduinos.
   LEDS.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   LEDS.setBrightness(50);
   Serial.println("Ready");
@@ -106,6 +106,7 @@ void circleRainbow() {
 
 void loop() {
   readSerial();
+
   if (MODE.equals("solid")) {
     solidColor();
   }
