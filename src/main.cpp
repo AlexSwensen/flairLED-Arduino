@@ -13,6 +13,8 @@
 #define LED_TYPE    WS2812 // Any LEDS's that FastLED supports.
 #define COLOR_ORDER GRB // LED Order (If your colors are wrong, flip this around.)
 
+#define DEBUG true //
+
 // Define the array of leds
 CRGB leds[NUM_LEDS];
 
@@ -51,13 +53,15 @@ void setup() {
 */
 void parseSerial(String input) {
 
-  if (input.indexOf('mode')) {
+  if (input.indexOf('mode') > -1) {
     input.trim(); // removes whitespace
     input.remove(0, 5); // removes 'mode'
     settings.mode = input;
+  } else {
+    settings.mode = settings.mode;
   }
 
-  if (input.indexOf('color')) {
+  if (input.indexOf('color') > -1) {
     input.trim(); //removes whitespace
     input.remove(0, 6);
   }
@@ -154,8 +158,8 @@ void loop() {
     circleRainbow();
   }
 
-  Serial.print("current mode is: ");
-  Serial.println(settings.mode);
-
-  // Serial.print("x");
+  if (DEBUG) {
+    Serial.print("current mode is: ");
+    Serial.println(settings.mode);
+  }
 }
