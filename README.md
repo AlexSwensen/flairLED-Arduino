@@ -1,6 +1,8 @@
 # flairLED-Arduino
-This repo is controller code that can be used with most Arduino compatible boards to control RGB LED strips.
+This repo is Arduino code that can be used with most Arduino compatible boards to control RGB LED strips.
 (NeoPixel, WS2811, WS2812B, ETC)
+
+It's the Arduino counterpart to [flairLED](https://github.com/AlexSwensen/flairLED)
 
 This code receives a color code over USB Serial, and sets the LED's to that.
 
